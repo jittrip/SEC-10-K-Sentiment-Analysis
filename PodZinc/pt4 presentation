@@ -1,0 +1,21 @@
+for filename in os.listdir(input_folder):
+        full_path = f'{input_folder}\{filename}'
+        cleaned_file=open(full_path,'r', encoding='utf-8')
+        cleaned_txt=cleaned_file.read()
+        file_split=str(filename).split('_')
+        
+        for lists in sentiment_dict:
+            variants_list = sentiment_dict[lists]
+            for words in variants_list:
+                sentiment_str = sentiment_str+f'\\b(?i){words}\\b|'
+            keywords=re.findall(sentiment_str_fin,cleaned_txt, re.DOTALL)
+            length=len(keywords)
+            keywords=''
+        word_columns=['Symbol','ReportType','FilingDate','Negative','Positive','Uncertainty','Litigious','Strong_Modal','Weak_Modal', 'Constraining']
+
+        df=pd.DataFrame([occurances], columns=word_columns)
+        dfadd_on=df
+        base=pd.concat([dfbase,dfadd_on], axis=0)
+        dfbase=base
+        occurances=[]
+    dfbase.to_csv(output_file, index=False)

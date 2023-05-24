@@ -1,0 +1,15 @@
+def joined_data(document_sentiments_input, output_file, ticker):
+    dfbase=None
+    df=pd.read_csv(document_sentiments_input)
+    for index,a in enumerate(ticker):
+        df2=df[(df == a).any(axis=1)]
+        filing_date_list=(df2['FilingDate'].to_list())
+        for i,date in enumerate(filing_date_list):
+            ending_date=datetime.strptime(date,"%m/%d/%Y")+timedelta(days=20)
+            yahoo_data=edgar_data.get_yahoo_data(starting_date_formatted,end_date_formatted, company_in_list)
+            resetted_yahoo_data=yahoo_data.reset_index()
+            words_row=df2.iloc[i]
+            worddf=pd.DataFrame(words_row)
+            concatteddf=pd.merge(resetted_yahoo_data, transposed, on = 'Symbol', how='left')
+            dfbase=pd.concat([dfbase,concatteddf], axis=0)
+    dfbase.to_csv(output_file, index=False)
